@@ -434,7 +434,7 @@ bool joinGzipFiles(const std::string& outputfile, const std::vector<std::string>
 {
     size_t inputSize = inputFiles.size();
     if (inputSize == 0) {
-       tp::eprintf(tp::EPF_CRIT,"at least one input file is required o/p: [%s] ", outputfile.c_str());
+       printf("ERROR:at least one input file is required o/p: [%s] ", outputfile.c_str());
        bail("at least one input file is required ", " ");
        return false;
     }
@@ -442,7 +442,7 @@ bool joinGzipFiles(const std::string& outputfile, const std::vector<std::string>
     unsigned long crc, tot;     /* running crc and total uncompressed length */
     FILE* out = fopen(outputfile.c_str(), "wb");
     if (NULL == out) {
-       tp::eprintf(tp::EPF_CRIT,"Failed to open file: [%s] errno:%d.", outputfile.c_str(), errno);
+       printf("ERROR: Failed to open file: [%s] errno:%d.", outputfile.c_str(), errno);
        return false;
     }
 
@@ -451,7 +451,7 @@ bool joinGzipFiles(const std::string& outputfile, const std::vector<std::string>
     std::vector<std::string>::const_iterator it = inputFiles.begin();
     while (inputSize--) {
         time_t  tod = time(NULL);
-        tp::eprintf(tp::EPF_INFO,"Adding : %s to %s %s\n", (*it).c_str(), outputfile.c_str(),  ctime(&tod));
+        printf("INFO, Adding : %s to %s %s\n", (*it).c_str(), outputfile.c_str(),  ctime(&tod));
         gzcopy(const_cast<char*>((*it).c_str()), inputSize, &crc, &tot, out);
         ++it;
     }
