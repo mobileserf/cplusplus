@@ -430,6 +430,40 @@ local void gzcopy(char *name, int clr, unsigned long *crc, unsigned long *tot,
 
 namespace MSERF {
 
+ GzJoin::GzJoin(const std::string& outputfile)
+ {
+    _out = fopen(outputfile.c_str(), "wb");
+    if (NULL == _out) {
+       printf(ERROR,"Failed to open file for writing: [%s] errno:%d.", outputfile.c_str(), errno);
+       return;
+    }
+    gzinit(&_crc, &_tot, _out);
+}
+
+bool GzJoin::append(const std::string& gzfile, bool final)
+{
+     bool result = false;
+     if(_out) {
+        printf(INFO,"appenfing gzfile : [%s]", gzfile.c_str());
+        gzcopy(const_cast<char*>(gzfile.c_str()), final, &_crc, &_tot, _out);
+        result = true;
+     }
+     return result;
+}
+
+void GzJoin::close()
+{
+ if(_out) {
+    /* write trailer if this is the last gzip file */
+    put4(_crc, _out);
+    put4(_tot, _out);
+    fclose(_out);
+    _out = NULL;
+ }
+}
+
+
+
 bool joinGzipFiles(const std::string& outputfile, const std::vector<std::string>& inputFiles)
 {
     size_t inputSize = inputFiles.size();
@@ -438,7 +472,9 @@ bool joinGzipFiles(const std::string& outputfile, const std::vector<std::string>
        bail("at least one input file is required ", " ");
        return false;
     }
-
+    std::vector<std::string>::const_iterator it = inputFiles.begin();
+  
+#if 1
     unsigned long crc, tot;     /* running crc and total uncompressed length */
     FILE* out = fopen(outputfile.c_str(), "wb");
     if (NULL == out) {
@@ -448,7 +484,6 @@ bool joinGzipFiles(const std::string& outputfile, const std::vector<std::string>
 
     /* join gzip files on command line and write to stdout */
     gzinit(&crc, &tot, out);
-    std::vector<std::string>::const_iterator it = inputFiles.begin();
     while (inputSize--) {
         time_t  tod = time(NULL);
         printf("INFO, Adding : %s to %s %s\n", (*it).c_str(), outputfile.c_str(),  ctime(&tod));
@@ -456,6 +491,14 @@ bool joinGzipFiles(const std::string& outputfile, const std::vector<std::string>
         ++it;
     }
     fclose(out); 
+  #else
+    GzJoin join(outputfile);
+    while (inputSize--) {
+      join.append(*it, inputSize);
+      ++it;
+    }
+
+  #endif
     return true;
 }
 }
