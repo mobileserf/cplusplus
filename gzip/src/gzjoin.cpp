@@ -454,9 +454,6 @@ bool GzJoin::append(const std::string& gzfile, bool final)
 void GzJoin::close()
 {
  if(_out) {
-    /* write trailer if this is the last gzip file */
-    put4(_crc, _out);
-    put4(_tot, _out);
     fclose(_out);
     _out = NULL;
  }
