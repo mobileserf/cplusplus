@@ -455,6 +455,7 @@ bool joinGzipFiles(const std::string& outputfile, const std::vector<std::string>
         gzcopy(const_cast<char*>((*it).c_str()), inputSize, &crc, &tot, out);
         ++it;
     }
+    fclose(out); 
     return true;
 }
 }
