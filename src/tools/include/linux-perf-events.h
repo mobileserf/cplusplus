@@ -71,7 +71,6 @@ public:
       //ADD_EVENT(this, PERF_COUNT_HW_CACHE_REFERENCES)
       //ADD_EVENT(this, PERF_COUNT_HW_CACHE_MISSES)
    }
-   
   }
 
   void init() {
@@ -186,7 +185,7 @@ public:
     uint64_t cpuCycles =  getValueForEvent(PERF_COUNT_HW_CPU_CYCLES);
     uint64_t instructions =  getValueForEvent(PERF_COUNT_HW_INSTRUCTIONS);
     uint64_t branchMiss =  getValueForEvent(PERF_COUNT_HW_BRANCH_MISSES);
-     std::cout<<"name: "<<name<<" bytes: "<<bytes<<" iteration: "<<iter<<" time: "<<timeDiff()<<" ns time/iter: "<<timeDiff()/iter<<" ns "<<std::endl;
+    std::cout<<"name: "<<name<<" bytes: "<<bytes<<" iteration: "<<iter<<" time: "<<timeDiff()<<" ns time/iter: "<<timeDiff()/iter<<" ns "<<std::endl;
     std::cout<<"\t Cycles Per Iteration      : "<<(cpuCycles*1.0/iter)<<std::endl;
     std::cout<<"\t Instruction Per Iteration : "<<(instructions*1.0/iter)<<std::endl;
     std::cout<<"\t Branch Miss Per Iteration : "<<(branchMiss*1.0/iter)<<std::endl;
@@ -309,7 +308,6 @@ private:
   std::vector<std::vector<uint64_t>> _allresults;
   std::vector<PerfEvent> _perfEvents;
 };
-
 #ifdef PERF_TEST
 std::string randomfloats(uint64_t howmany) {
   std::stringstream out;
