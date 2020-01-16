@@ -71,7 +71,7 @@ public:
       //ADD_EVENT(this, PERF_COUNT_HW_CACHE_REFERENCES)
       //ADD_EVENT(this, PERF_COUNT_HW_CACHE_MISSES)
    }
-    init();
+   
   }
 
   void init() {
