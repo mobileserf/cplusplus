@@ -51,7 +51,7 @@ template <int TYPE = PERF_TYPE_HARDWARE> class LinuxEvents {
   mutable bool working;
   std::vector<PerfEvent> _perfEvents;
   std::chrono::high_resolution_clock::time_point _startTime;
-  double _nanoseconds;
+  std::chrono::duration<uint64_t, std::nano> _nanoseconds;
 
 public:
   void addEvent(const PerfEvent& event) {
@@ -120,7 +120,7 @@ public:
 
   inline void end() {
     std::chrono::high_resolution_clock::time_point endTime = std::chrono::high_resolution_clock::now();
-    _nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>( endTime - _startTime ).count();
+    _nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>( endTime - _startTime );
 
     std::vector<uint64_t> temp_result_vec;
     temp_result_vec.resize(_perfEvents.size() * 2 + 1);
@@ -143,7 +143,7 @@ public:
     }
 #endif
   }
-  double timeDiff() const { return _nanoseconds;}
+  uint64_t timeDiff() const { return _nanoseconds.count();}
   size_t numberOfEvents() const { return _perfEvents.size();}
 
   std::vector<PerfEvent> perfEvents() const {
@@ -186,7 +186,7 @@ public:
     uint64_t cpuCycles =  getValueForEvent(PERF_COUNT_HW_CPU_CYCLES);
     uint64_t instructions =  getValueForEvent(PERF_COUNT_HW_INSTRUCTIONS);
     uint64_t branchMiss =  getValueForEvent(PERF_COUNT_HW_BRANCH_MISSES);
-    std::cout<<"name: "<<name<<" bytes: "<<bytes<<" iteration: "<<iter<<std::endl;
+     std::cout<<"name: "<<name<<" bytes: "<<bytes<<" iteration: "<<iter<<" time: "<<timeDiff()<<" ns time/iter: "<<timeDiff()/iter<<" ns "<<std::endl;
     std::cout<<"\t Cycles Per Iteration      : "<<(cpuCycles*1.0/iter)<<std::endl;
     std::cout<<"\t Instruction Per Iteration : "<<(instructions*1.0/iter)<<std::endl;
     std::cout<<"\t Branch Miss Per Iteration : "<<(branchMiss*1.0/iter)<<std::endl;
@@ -418,6 +418,6 @@ int main() {
 }
 #endif //PERF_TEST
 
+#endif //linux
 
-#endif
 #endif// __MSERF_TOOL_PERF_STATS_H__
