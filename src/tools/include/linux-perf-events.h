@@ -1,3 +1,4 @@
+//g++ -O2 -std=c++17 -o parsefloats parsefloats.cpp -Wall -I.
 #ifndef __MSERF_TOOL_PERF_STATS_H__
 #define __MSERF_TOOL_PERF_STATS_H__
 // https://github.com/WojciechMula/toys/blob/master/000helpers/linux-perf-events.h
@@ -158,7 +159,6 @@ public:
     std::vector<uint64_t> tmp;
     tmp.reserve(_perfEvents.size());
     for(auto& event: _perfEvents) {tmp.push_back(event._result);}
-    std::cout<<"TMP: "<<tmp.size()<<std::endl;
     return tmp;
   }
 
@@ -309,6 +309,115 @@ private:
   std::vector<std::vector<uint64_t>> _allresults;
   std::vector<PerfEvent> _perfEvents;
 };
+
+#ifdef PERF_TEST
+std::string randomfloats(uint64_t howmany) {
+  std::stringstream out;
+  uint64_t offset = 1190;
+  for(size_t i = 1; i <= howmany; i++) {
+    uint64_t x = rng(i + offset);
+    double d;
+    ::memcpy(&d, &x, sizeof(double));
+    // paranoid
+    while((! std::isnormal(d))  || std::isnan(d) || std::isinf(d)) {
+      offset++;
+      x = rng(i + offset);
+    ::memcpy(&d, &x, sizeof(double));
+     }
+    out << std::setprecision(17) << d;
+    if(i < howmany) out << " ";
+  }
+  return out.str();
+}
+
+double sum(std::string s, size_t howmany) {
+  double answer = 0;
+  std::stringstream in(s);
+  double x;
+  while(in >> x) {
+    answer += x;
+    howmany --;
+  }
+  if(howmany != 0) throw std::runtime_error("bug");
+  return answer;
+}
+#if 0
+uint64_t sumints_fromchars(std::string mystring, size_t howmany) {
+  const char * s = mystring.data();
+  size_t length = mystring.size();
+  uint64_t answer = 0;
+  const char * lst;
+  const char * st;
+  lst = s;
+  const char * end = s + length;
+  uint64_t n {0};
+  do {
+    for (st = lst; (st < end) && std::isspace(*st); ++st);
+    if(st == end) break;
+    if (lst = std::from_chars(st, end, n).ptr; lst != st) {
+      answer += n;
+      howmany--;
+    }
+  } while (lst != st);
+
+  if(howmany != 0) throw std::runtime_error("bug");
+  return answer;
+}
+#endif
+double sum_strtod(std::string mystring, size_t howmany) {
+  const char * s = mystring.data();
+  size_t length = mystring.size();
+  double answer = 0;
+  char * end;
+  const char * finals = s + length;
+  double n {0};
+  do {
+    n = strtod(s, &end);
+    if(end == s) break;
+    answer += n;
+    howmany --;
+    s = end;
+  } while (s < finals);
+  if(howmany != 0) throw std::runtime_error("bug");
+  return answer;
+}
+void demo(uint64_t howmany) {
+  std::cout << "processing " << howmany << " floats "  << std::endl;
+  LinuxEvents<PERF_TYPE_HARDWARE> unified;
+  LinuxEventsStats<PERF_TYPE_HARDWARE> stats(3);
+  //
+  std::string s = randomfloats(howmany);
+  double volume = s.size() / (1024. * 1024);
+  printf("string size:%ld howmany:%ld volume %.2f GB\n",  s.size(), howmany, volume);
+  printf("bytes per number %.2f\n", s.size() * 1. / howmany);
+  for (size_t trial = 0; trial < 3; trial++) {
+    printf("\n ==== trial %zu\n", trial);
+
+    unified.start();
+    double ts = sum(s, howmany);
+    unified.end();
+    if(ts == 0) printf("bug\n");
+    //unified.print();
+    unified.printDefault("stream", s.size(), howmany);
+  }
+  for (size_t trial = 0; trial < 3; trial++) {
+    printf("\n ==== trial %zu\n", trial);
+    unified.start();
+    double ts = sum_strtod(s, howmany);
+    unified.end();
+    if(ts == 0) printf("bug\n");
+    //unified.print();
+    unified.printDefault("strtod", s.size(), howmany);
+    stats.addResult(unified);
+  }
+  stats.printStats();
+}
+int main() {
+  demo(100 * 1000);
+  return 0;
+}
+#endif //PERF_TEST
+
 
 #endif
 #endif// __MSERF_TOOL_PERF_STATS_H__
