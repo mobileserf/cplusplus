@@ -309,7 +309,7 @@ private:
   std::vector<PerfEvent> _perfEvents;
 };
 
-ifndef NOINLINE
+#ifndef NOINLINE
 #define NOINLINE __attribute__((noinline))
 #endif
 //macros for testing
@@ -466,7 +466,7 @@ NOINLINE uint64_t fast_pow(uint64_t x, unsigned y)
         return val;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
     uint64_t base = atol(argv[ 1 ]);
     unsigned power = atol(argv[ 2 ]);
     uint64_t iteration = atol(argv[ 3 ]);
