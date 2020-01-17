@@ -308,6 +308,48 @@ private:
   std::vector<std::vector<uint64_t>> _allresults;
   std::vector<PerfEvent> _perfEvents;
 };
+
+ifndef NOINLINE
+#define NOINLINE __attribute__((noinline))
+#endif
+//macros for testing
+template<typename F, class ... Args>
+NOINLINE void execute_perf(uint64_t iteration, const char* name, F f, Args ... args) {
+    LinuxEvents<PERF_TYPE_HARDWARE> unified;
+    unified.start();
+    for (int t = 0; t < iteration; t++) {
+           f(std::forward<Args>(args)...);
+    }
+    unified.end();
+    unified.printDefault(name, sizeof(uint64_t)*iteration, iteration);
+}
+
+//macros for testing
+template<typename F, class ... Args>
+NOINLINE void execute_perf(uint64_t iteration, size_t size, const char* name, F f, Args ... args) {
+    LinuxEvents<PERF_TYPE_HARDWARE> unified;
+    unified.start();
+    for (int t = 0; t < iteration; t++) {
+           f(std::forward<Args>(args)...);
+    }
+    unified.end();
+    unified.printDefault(name, size, iteration);
+}
+
+#define MSERF_EXECUTE_PERF(iteration, func, ... ) \
+     execute_perf(iteration, #func, func, __VA_ARGS__);
+
+#define MSERF_EXECUTE_PERF_SIZE(iteration, size, func, ... ) \
+     execute_perf(iteration, size, #func, func, __VA_ARGS__);
+
+#define MSERF_EXPECT_EQ(expected_result, func, ...) \
+     if(expected_result != func(__VA_ARGS__)) { \
+        std::cout<<"pow: "<<expected_result<<"!= error: "<< func(__VA_ARGS__)<<#func<<std::endl; \
+        return 1; \
+     }
+
+
+
 #ifdef PERF_TEST
 std::string randomfloats(uint64_t howmany) {
   std::stringstream out;
@@ -410,7 +452,29 @@ void demo(uint64_t howmany) {
   }
   stats.printStats();
 }
+
+NOINLINE uint64_t std_pow(uint64_t x, unsigned y)
+{
+  return std::pow(x, y);
+}
+NOINLINE uint64_t fast_pow(uint64_t x, unsigned y)
+{
+        uint64_t val = x;
+        for ( unsigned i = 1; i < y; i++) {
+                val *= x;
+        }
+        return val;
+}
+
 int main() {
+    uint64_t base = atol(argv[ 1 ]);
+    unsigned power = atol(argv[ 2 ]);
+    uint64_t iteration = atol(argv[ 3 ]);
+    uint64_t pow = std_pow(base, power);
+    
+    MSERF_EXPECT_EQ(pow, fast_pow, base, power)
+    MSERF_EXECUTE_PERF(iteration, fast_pow,  base, power )
+
   demo(100 * 1000);
   return 0;
 }
