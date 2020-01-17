@@ -326,7 +326,7 @@ NOINLINE void execute_perf(uint64_t iteration, const char* name, F f, Args ... a
 
 //macros for testing
 template<typename F, class ... Args>
-NOINLINE void execute_perf(uint64_t iteration, size_t size, const char* name, F f, Args ... args) {
+NOINLINE void execute_perf(uint64_t iteration, size_t size, const char* name, F f, Args&& ... args) { //perfect forward = && and std::forward
     LinuxEvents<PERF_TYPE_HARDWARE> unified;
     unified.start();
     for (int t = 0; t < iteration; t++) {
