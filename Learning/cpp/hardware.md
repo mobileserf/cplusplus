@@ -7,3 +7,5 @@
    
    N/w locality tool - https://www.open-mpi.org/projects/netloc/
               netloc (depends on hwloc)
+
+ s/w - https://www.open-mpi.org/ (both hwloc and netloc are subproject of this)
