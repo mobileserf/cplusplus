@@ -1,4 +1,4 @@
-1)lti-core processor architecture tools
+1)Multi-core processor architecture tools
 
     http://xmodulo.com/identify-cpu-processor-architecture-linux.html
     lstopo, likwid, numactl 
