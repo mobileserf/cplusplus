@@ -4,4 +4,6 @@
     lstopo, likwid, numactl 
     https://www.open-mpi.org/software/ompi/v4.0/
     https://www.open-mpi.org/projects/hwloc/
-    
+   
+   N/w locality tool - https://www.open-mpi.org/projects/netloc/
+              netloc (depends on hwloc)
