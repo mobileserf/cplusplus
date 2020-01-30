@@ -37,4 +37,6 @@ https://thoughtbot.com/blog/the-magic-behind-configure-make-make-install
   * ./configure - Generate Makefile from Makefile.in
   * make distcheck - Use Makefile to build and test a tarball to distribute
   
+  * Extra: autoreconf -if  # generate the configure script and Makefile.in files from configure.ac
+  
   
