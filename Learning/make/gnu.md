@@ -1,15 +1,15 @@
 https://thoughtbot.com/blog/the-magic-behind-configure-make-make-install
 
-#MAKE
+**MAKE**
 
-Phony Targets (or Artificial Targets)
+* Phony Targets (or Artificial Targets)
 
    - Phony target is always out-of-date and its command will be run. The standard phony targets are: all, clean, install.
-Variables
+* Variables
 
    - A variable begins with a $ and is enclosed within parentheses (...) or braces {...}. Single character variables do not need the parentheses. For example, $(CC), $(CC_FLAGS), $@, $^.
 
-Automatic Variables
+* Automatic Variables
 
   Automatic variables are set by make after a rule is matched. There include:
 
@@ -20,7 +20,7 @@ Automatic Variables
   $+: similar to $^, but includes duplicates.
   $?: the names of all prerequisites that are newer than the target, separated by spaces.
   
-  Virtual Path - VPATH & vpath
+* Virtual Path - VPATH & vpath
   
      VPATH - Search for dependencies and targets from "src" and "include" directories
      vpath - more precise about the file type and its search directory
@@ -29,7 +29,7 @@ Automatic Variables
      vpath %.c src
      vpath %.h include
      
- #Configure -automake & auotconfig
+ **Configure -automake & auotconfig**
  
   aclocal # Set up an m4 environment
   autoconf # Generate configure from configure.ac
