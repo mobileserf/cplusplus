@@ -16,6 +16,7 @@ config.status
 stamp-h1
 libtool
 
+.dirstamp
 .deps
 Makefile
 Makefile.in

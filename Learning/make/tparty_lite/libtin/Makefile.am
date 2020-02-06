@@ -32,4 +32,5 @@ libtiniclude_HEADERS = include/tins/internals.h \
 libtinincludedetail_HEADERS = include/tins/detail/address_helpers.h \
         include/tins/detail/type_traits.h \
         include/tins/detail/smart_ptr.h \
+        include/tins/detail/address_helpers.h \
         include/tins/detail/sequence_number_helpers.h
