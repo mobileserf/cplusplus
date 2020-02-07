@@ -48,4 +48,8 @@ write-through/write-back/write-around caching
   https://github.com/riteshgajare/cache-simulator
   https://github.com/brian-murphy/cache-sim
   
+**The read policies are**
+ * Read Through -  reading a word from main memory to CPU
+ *No Read Through - reading a block from main memory to cache and then from cache to CPU
+  
   
