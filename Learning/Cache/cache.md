@@ -14,4 +14,7 @@ write-through/write-back/write-around caching
   * Write-around - data is written only to the backing store(main memory) without writing to the cache
   https://www.felixcloutier.com/x86/clwb
   
+  https://github.com/riteshgajare/cache-simulator
+  https://github.com/brian-murphy/cache-sim
+  
   
