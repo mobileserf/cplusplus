@@ -57,3 +57,8 @@ write-through/write-back/write-around caching
  *No Read Through - reading a block from main memory to cache and then from cache to CPU
   
   
+  
+** memory allocator
+  * jemalloc
+  * https://github.com/EmuraDaisuke/MemoryAllocator.KanameShiki
+  
