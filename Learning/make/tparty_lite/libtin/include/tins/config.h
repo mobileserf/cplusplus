@@ -1,7 +1,7 @@
 #ifndef TINS_CONFIG_H
 #define TINS_CONFIG_H
 
-/* modified from config.h.in
+/* modified from config.h.in*/
 
 /* Define if the compiler supports basic C++11 syntax */
 #define TINS_HAVE_CXX11 1
