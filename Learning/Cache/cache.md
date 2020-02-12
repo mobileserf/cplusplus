@@ -54,11 +54,18 @@ write-through/write-back/write-around caching
   
 **The read policies are**
  * Read Through -  reading a word from main memory to CPU
- *No Read Through - reading a block from main memory to cache and then from cache to CPU
+ * No Read Through - reading a block from main memory to cache and then from cache to CPU
   
   
   
 ** memory allocator
   * jemalloc
   * https://github.com/EmuraDaisuke/MemoryAllocator.KanameShiki
+  
+**Multi Thread** -http://threadspotter.paratools.com/ 
+
+  https://docs.roguewave.com/threadspotter/2011.2/manual_html_linux/manual_html/ch_problems.html
+  
+  MESI - https://docs.roguewave.com/threadspotter/2011.2/manual_html_linux/manual_html/ch_intro_coherence.html
+  
   
