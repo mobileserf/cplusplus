@@ -70,4 +70,10 @@ write-through/write-back/write-around caching
   
   MESI - https://docs.roguewave.com/threadspotter/2011.2/manual_html_linux/manual_html/ch_intro_coherence.html
   
+**NUMA malloc**
+  * libnuma.so
+  * https://github.com/memkind/memkind
+  * https://stackoverflow.com/questions/8154162/numa-aware-cache-aligned-memory-allocation
+  * http://man7.org/linux/man-pages/man3/numa.3.html
+  
   
