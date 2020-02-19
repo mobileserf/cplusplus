@@ -1,4 +1,9 @@
 
+**Cache coherency - ATOMIC**
+  * https://fgiesen.wordpress.com/2014/07/07/cache-coherency/
+  * https://fgiesen.wordpress.com/2014/08/18/atomics-and-contention/
+  * https://fgiesen.wordpress.com/2016/08/07/why-do-cpus-have-multiple-cache-levels/
+  * https://fgiesen.wordpress.com/2013/02/17/optimizing-sw-occlusion-culling-index/
 
 **ARTICLES**
 * https://developers.redhat.com/blog/2016/03/01/reducing-memory-access-times-with-caches/
