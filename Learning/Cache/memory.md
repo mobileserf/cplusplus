@@ -17,6 +17,10 @@ Huge page -TLB
   **TLB Tuning**
    * https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/performance_tuning_guide/sect-red_hat_enterprise_linux-performance_tuning_guide-memory-configuring-huge-pages
    * https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/performance_tuning_guide/sect-red_hat_enterprise_linux-performance_tuning_guide-configuring_transparent_huge_pages
+   
+   **posix_memalign()**
   
   
+ **Transparent Huge Page - redhat**  (not good for performance), another doemon(khugepaged) is running background
+   * https://access.redhat.com/solutions/46111
 
