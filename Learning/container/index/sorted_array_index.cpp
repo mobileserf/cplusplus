@@ -1,3 +1,4 @@
+// g++ sse_memmove.c  sse_memcpy.cpp avl_array_sort.cpp -O3 -mavx2 -mfma -std=c++14 -I.
 //g++ avl_array_sort.cpp -O2  -mavx -msse4 -std=c++11
 //perf record --call-graph dwarf ./a.out 10240
 // perf report --call-graph
@@ -9,8 +10,8 @@
 #include <vector>
 #include "avxmem.h"
 #define MAX_OPERATION 10240
-#define MAX_ENTRY_IN_AVL 2048
-//#define MAX_ENTRY_IN_AVL 512
+#define MAX_ENTRY_IN_AVL (2048*1)
+//#define MAX_ENTRY_IN_AVL (512)
 
 #define SIMD 1
 
