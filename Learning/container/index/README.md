@@ -1,4 +1,4 @@
-g++ sse_memmove.c  sse_memcpy.cpp avl_array_sort.cpp -O3 -mavx2 -mfma -std=c++14 -I.
+g++ sse_memmove.c  sse_memcpy.cpp sorted_array_index.cpp -O3 -mavx2 -mfma -std=c++14 -I.
 g++ avl_array.cpp -O3 -mavx2 -mfma -std=c++14 -I.
 
 Test 10240 unique keys, approximatly 10240 operations per array => 105 Million queries
@@ -37,3 +37,6 @@ avl_array_sort.cpp  without SIMD
 Array_size 512 -  0m16.893s (33M)  => 6.2 million queries/s
 Array_size 1024 - 0m25.044s (63M)
 Array_size 2048 - 0m41.050s (123M)
+
+credit avx-array - https://github.com/mpaland/avl_array
+       SIMD - https://github.com/KNNSpeed/AVX-Memmove
