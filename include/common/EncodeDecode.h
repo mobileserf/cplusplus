@@ -25,6 +25,12 @@
       return ENCODE_LENGTH(buf);
 #endif
 
+#define ENCODE_ADVANCE_BUFFER(_len) \
+   _tmp += _len;
+
+#define DECODE_ADVANCE_BUFFER(_len) \
+   _tmp += _len;
+
 #define ENCODE_BASIC_TYPE(_var_name) \
      *((decltype(_var_name)*)_tmp) = _var_name;  _tmp += sizeof(decltype(_var_name));
 
