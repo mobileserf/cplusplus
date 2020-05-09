@@ -61,6 +61,19 @@
 #define DECODE_STRING(_var_name, len) \
     _var_name.assign(reinterpret_cast<char*>(_tmp), len); _tmp += len;
 
+//Pack header byte
+#define PACK_BASIC(_buf, _var_name, _type, len) \
+     *((type*)(_buf-len) = (type)_var_name;
+
+#define PACK_UINT8(_buf, _var_name) \
+     PACK_BASIC(_buf, _var_name, uint8_t, 0)
+
+#define PACK_UINT16(_buf, var_name, _type) \
+     PACK_BASIC(_buf, _var_name, uint16_t, 0)
+
+#define PACK_UINT32(_buf, var_name, _type) \
+     PACK_BASIC(_buf, _var_name, uint32_t, 0)
+
 #if 0
 struct EncodeDecodeEx {
 
