@@ -1,5 +1,5 @@
-#ifndef __MSERF_ENCODE_DECODE_H__
-#define __MSERF_ENCODE_DECODE_H__
+#ifndef __TICKER_FILE_ENCODE_DECODE_H__
+#define __TICKER_FILE_ENCODE_DECODE_H__
 
 #include <cstring>
 
@@ -8,13 +8,13 @@
      uint8_t* _tmp  = _buf;
 
 #define ENCODE_LENGTH(_buf) \
-      (_tmp - buf)
+      (_tmp - _buf)
 
 #define DECODE_START(_buf) \
      ENCODE_START(_buf)
 
 #define DECODE_LENGTH(_buf) \
-      ENCODE_LENGTH(buf)
+      ENCODE_LENGTH(_buf)
 
 #if 0
 #define ENCODE_FUNC_START(_func_name) \
@@ -37,29 +37,29 @@
 #define DECODE_BASIC_TYPE(_var_name) \
      _var_name = *((decltype(_var_name)*)_tmp) ; _tmp += sizeof(decltype(_var_name));
 
-#define ENCODE_ENUM_TO_TYPE(_var_name, _type) \
-     *((_type*)_tmp) = (_type)_var_name;  _tmp += sizeof(_type);
+#define ENCODE_AS_TYPE(_var_name, _type) \
+     *((_type*)_tmp) = static_cast<_type>(_var_name);  _tmp += sizeof(_type);
 
-#define DECODE_ENUM_TO_TYPE(_var_name, _type) \
-     _var_name = (decltype(_var_name))*((_type*)_tmp) ; _tmp += sizeof(_type);
+#define DECODE_AS_TYPE(_var_name, _type) \
+     _var_name = static_cast<decltype(_var_name)>(*((_type*)_tmp)) ; _tmp += sizeof(_type);
 
 #define ENCODE_ENUM_UINT8(_var_name) \
-     ENCODE_ENUM_TO_TYPE(_var_name, uint8_t)
+     ENCODE_AS_TYPE(_var_name, uint8_t)
 
 #define ENCODE_ENUM_UINT16(_var_name) \
-     ENCODE_ENUM_TO_TYPE(_var_name, uint16_t)
+     ENCODE_AS_TYPE(_var_name, uint16_t)
 
 #define DECODE_ENUM_UINT8(_var_name) \
-     DECODE_ENUM_TO_TYPE(_var_name, uint8_t)
+     DECODE_AS_TYPE(_var_name, uint8_t)
 
 #define DECODE_ENUM_UINT16(_var_name) \
-     DECODE_ENUM_TO_TYPE(_var_name, uint16_t)
+     DECODE_AS_TYPE(_var_name, uint16_t)
 
 #define ENCODE_BYTE_ARRAY(_var_name, len) \
-    memcpy(_tmp, _var_name, len); _tmp+= len;
+    std::memcpy(_tmp, _var_name, len); _tmp+= len;
 
 #define DECODE_BYTE_ARRAY(_var_name, len) \
-    memcpy(_var_name, _tmp, len); _tmp+= len;
+    std::memcpy(_var_name, _tmp, len); _tmp+= len;
 
 #define ENCODE_STRING(_var_name) \
     ENCODE_BYTE_ARRAY(_var_name.c_str(), _var_name.length())
@@ -67,7 +67,6 @@
 #define DECODE_STRING(_var_name, len) \
     _var_name.assign(reinterpret_cast<char*>(_tmp), len); _tmp += len;
 
-//Pack header byte
 #define PACK_BASIC(_buf, _var_name, _type, len) \
      *((type*)(_buf-len) = (type)_var_name;
 
@@ -112,9 +111,8 @@ struct EncodeDecodeEx {
      return DECODE_LENGTH(buf);
   }
 
-#endif
 
 };
+#endif
 
-#endif  // __MSERF_ENCODE_DECODE_H__
-
+#endif  // ENCODE_DECODE
