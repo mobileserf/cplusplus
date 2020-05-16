@@ -8,17 +8,17 @@
 
 namespace Mserf {
 
-template<typename TYPE , size_t ARRAY_SIZE> struct bufferT {
-    bufferT(): len(0) {}
-    bufferT(const uint8_t* pointer,  TYPE length){ copy(pointer, length); }
-    bufferT(char* pointer,  TYPE length)         { copy(reinterpret_cast<uint8_t*>(pointer), length);}
-    bufferT(const bufferT& other)                { copy(other.buf, other.len);  }
-    bufferT& operator=( const bufferT& other)
+template<typename TYPE , size_t ARRAY_SIZE> struct Buffer {
+    Buffer(): len(0) {}
+    Buffer(const uint8_t* pointer,  TYPE length){ copy(pointer, length); }
+    Buffer(char* pointer,  TYPE length)         { copy(reinterpret_cast<uint8_t*>(pointer), length);}
+    Buffer(const Buffer& other)                { copy(other.buf, other.len);  }
+    Buffer& operator=( const Buffer& other)
     {
       if(this != &other) { copy(other.buf, other.len); }
       return *this;
     }
-    ~bufferT() {  clear();  }
+    ~Buffer() {  clear();  }
     void clear() {  len = 0;  }
     void copy(const uint8_t* buffer,  TYPE length) {
        assert(length<=ARRAY_SIZE);
@@ -87,21 +87,21 @@ template<typename TYPE , size_t ARRAY_SIZE> struct bufferT {
     uint8_t buf[ARRAY_SIZE];
 };
 
-template<typename TYPE> struct bufferT<TYPE, 0> {
-    bufferT(): buf(NULL), len(0) {}
+template<typename TYPE> struct Buffer<TYPE, 0> {
+    Buffer(): buf(NULL), len(0) {}
 
-    bufferT(const uint8_t* pointer,  TYPE length): buf(pointer), len(length) {} /* we own the buffer, don't delete it */
-    bufferT(char* pointer,  TYPE length): buf(reinterpret_cast<uint8_t*>(pointer)), len(length) {} /* we own the buffer, don't delete it */
-    bufferT(const bufferT& other)
+    Buffer(const uint8_t* pointer,  TYPE length): buf(pointer), len(length) {} /* we own the buffer, don't delete it */
+    Buffer(char* pointer,  TYPE length): buf(reinterpret_cast<uint8_t*>(pointer)), len(length) {} /* we own the buffer, don't delete it */
+    Buffer(const Buffer& other)
     {
        copy(other.buf, other.len);
     }
-    bufferT& operator=( const bufferT& other)
+    Buffer& operator=( const Buffer& other)
     {
       if(this != &other) { copy(other.buf, other.len); }
       return *this;
     }
-    ~bufferT() {
+    ~Buffer() {
       clear();
     }
     void clear() {
@@ -182,10 +182,10 @@ template<typename TYPE> struct bufferT<TYPE, 0> {
     TYPE len;
 };
 
-using bufptr8_t = bufferT<uint8_t, 0>;
-using bufptr16_t = bufferT<uint16_t,0>;
-using bufptr32_t = bufferT<uint32_t, 0>;
-using bufptr64_t = bufferT<uint64_t, 0>;
+using bufptr8_t = Buffer<uint8_t, 0>;
+using bufptr16_t = Buffer<uint16_t,0>;
+using bufptr32_t = Buffer<uint32_t, 0>;
+using bufptr64_t = Buffer<uint64_t, 0>;
 
 } //end namespace Mserf
 #endif //__MSERF_COMMON_BUFFER_H__
