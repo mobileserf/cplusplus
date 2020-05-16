@@ -1,20 +1,20 @@
-#ifndef __TICKER_FILE_ENCODE_DECODE_H__
-#define __TICKER_FILE_ENCODE_DECODE_H__
+#ifndef __COMMON_ENCODE_DECODE_H__
+#define __COMMON_ENCODE_DECODE_H__
 
 #include <cstring>
 
 
 #define ENCODE_START(_buf) \
-     uint8_t* _tmp  = _buf;
+     uint8_t* _etmp  = _buf;
 
 #define ENCODE_LENGTH(_buf) \
-      (_tmp - _buf)
+      (_etmp - _buf)
 
 #define DECODE_START(_buf) \
-     ENCODE_START(_buf)
+     uint8_t* _dtmp  = _buf;
 
 #define DECODE_LENGTH(_buf) \
-      ENCODE_LENGTH(_buf)
+      (_dtmp - _buf)
 
 #if 0
 #define ENCODE_FUNC_START(_func_name) \
@@ -26,22 +26,22 @@
 #endif
 
 #define ENCODE_ADVANCE_BUFFER(_len) \
-   _tmp += _len;
+   _etmp += _len;
 
 #define DECODE_ADVANCE_BUFFER(_len) \
-   _tmp += _len;
+   _dtmp += _len;
 
 #define ENCODE_BASIC_TYPE(_var_name) \
-     *((decltype(_var_name)*)_tmp) = _var_name;  _tmp += sizeof(decltype(_var_name));
+     *((decltype(_var_name)*)_etmp) = _var_name;  _etmp += sizeof(decltype(_var_name));
 
 #define DECODE_BASIC_TYPE(_var_name) \
-     _var_name = *((decltype(_var_name)*)_tmp) ; _tmp += sizeof(decltype(_var_name));
+     _var_name = *((decltype(_var_name)*)_dtmp) ; _dtmp += sizeof(decltype(_var_name));
 
 #define ENCODE_AS_TYPE(_var_name, _type) \
-     *((_type*)_tmp) = static_cast<_type>(_var_name);  _tmp += sizeof(_type);
+     *((_type*)_etmp) = static_cast<_type>(_var_name);  _etmp += sizeof(_type);
 
 #define DECODE_AS_TYPE(_var_name, _type) \
-     _var_name = static_cast<decltype(_var_name)>(*((_type*)_tmp)) ; _tmp += sizeof(_type);
+     _var_name = static_cast<decltype(_var_name)>(*((_type*)_dtmp)) ; _dtmp += sizeof(_type);
 
 #define ENCODE_ENUM_UINT8(_var_name) \
      ENCODE_AS_TYPE(_var_name, uint8_t)
@@ -56,16 +56,23 @@
      DECODE_AS_TYPE(_var_name, uint16_t)
 
 #define ENCODE_BYTE_ARRAY(_var_name, len) \
-    std::memcpy(_tmp, _var_name, len); _tmp+= len;
+    std::memcpy(_etmp, _var_name, len); _etmp+= len;
 
 #define DECODE_BYTE_ARRAY(_var_name, len) \
-    std::memcpy(_var_name, _tmp, len); _tmp+= len;
+    std::memcpy(_var_name, _dtmp, len); _dtmp+= len;
+
+#define ENCODE_CHAR_ARRAY(_var_name) \
+    size_t len = strlen(_var_name) +1; \
+    std::memcpy(_etmp, _var_name, len); _etmp+= len;
+
+#define DECODE_CHAR_ARRAY(_var_name) \
+    strcpy(_var_name, (char*)_dtmp); _dtmp+= strlen(_var_name)+1;
 
 #define ENCODE_STRING(_var_name) \
     ENCODE_BYTE_ARRAY(_var_name.c_str(), _var_name.length())
 
 #define DECODE_STRING(_var_name, len) \
-    _var_name.assign(reinterpret_cast<char*>(_tmp), len); _tmp += len;
+    _var_name.assign(reinterpret_cast<char*>(_dtmp), len); _dtmp += len;
 
 #define PACK_BASIC(_buf, _var_name, _type, len) \
      *((type*)(_buf-len) = (type)_var_name;
@@ -115,4 +122,4 @@ struct EncodeDecodeEx {
 };
 #endif
 
-#endif  // ENCODE_DECODE
+#endif  // COMMON_ENCODE_DECODE
