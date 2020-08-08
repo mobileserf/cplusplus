@@ -8,7 +8,7 @@
 
 #include "common/bit/BitUtil.h"
 
-namespace Msef {
+namespace Mserf {
 
 namespace BitUtil {
 
@@ -64,3 +64,6 @@ class BitmapWriter {
 };
 
 }   // END OF NS: BitUtil
+
+}   // END OF NS: Mserf
+#endif // __MSERF_BIT_UTIL_BITMAP_WRITER_H__
